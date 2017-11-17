@@ -292,6 +292,7 @@ class CellUtils {
                 if (checkComboBox != null) {
                     //Get items from string representation
                     String[] separateItems = convertCommaListToSeparateItems(cell.getItem());
+                    //Check each thing contained in "item"
                     for (String s : separateItems) {
                         checkComboBox.getCheckModel().check((T) s);
                     }
@@ -336,7 +337,7 @@ class CellUtils {
             //Only when box closes
             if (event.getEventType().getName().equals("COMBO_BOX_BASE_ON_HIDDEN")) {
                 if (cell.isEditing()) {
-                    cell.commitEdit(convertToCommaSeparatedList(checkComboBox.getCheckModel().getCheckedItems()));
+                    cell.commitEdit(convertToCommaList(checkComboBox.getCheckModel().getCheckedItems()));
                 }
             }
         });
@@ -345,12 +346,8 @@ class CellUtils {
 
     /**
      * Is this doing the job of a Converter? How could I do this same thing with a converter?
-     *
-     * @param checkedItems
-     * @param <T>
-     * @return
      */
-    private static <T> T convertToCommaSeparatedList(ObservableList<T> checkedItems) {
+    private static <T> T convertToCommaList(ObservableList<T> checkedItems) {
         //Prepare StringBuilder
         StringBuilder sb = new StringBuilder();
 

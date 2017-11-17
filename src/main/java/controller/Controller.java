@@ -44,7 +44,10 @@ public class Controller {
     }
 
     private void setupCellFactories() {
+        //Prepare the checkable options that will be given to the user
         ObservableList<String> options = FXCollections.observableArrayList("Open", "Cut", "Ok");
+
+
         conditionColumn.setCellFactory(CheckComboBoxTableCell.forTableColumn(options));
 
         conditionColumn.setOnEditStart(handler -> System.out.println("Start."));
