@@ -24,15 +24,13 @@
  */
 package customtablecell;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
 import javafx.scene.Node;
-import javafx.scene.control.Cell;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import org.controlsfx.control.CheckComboBox;
@@ -333,14 +331,32 @@ class CellUtils {
         CheckComboBox<T> checkComboBox = new CheckComboBox<T>(items);
         checkComboBox.converterProperty().bind(converter);
         checkComboBox.setMaxWidth(Double.MAX_VALUE);
-        checkComboBox.addEventHandler(EventType.ROOT, event -> {
-            //Only when box closes
-            if (event.getEventType().getName().equals("COMBO_BOX_BASE_ON_HIDDEN")) {
+
+        //Cancel or Commit, depending on which key is pressed
+        // FIXME: 11/17/2017 I think CheckComboBox is doing something that's causing the cancel key to come back as UNDEFINED.
+        checkComboBox.addEventHandler(KeyEvent.KEY_TYPED, keyEventEventHandler -> {
+            System.out.println(keyEventEventHandler.toString());
+
+            KeyCode code = keyEventEventHandler.getCode();
+
+            if (code.equals(KeyCode.UNDEFINED) || code.equals(KeyCode.ESCAPE)) {
+                // TODO: 11/17/2017 When it's canceled we need to restore its previous state by getting the saved value in the property.
+                cell.cancelEdit();
+            }
+        });
+
+        //Commit only when box closes
+        checkComboBox.addEventHandler(ComboBox.ON_HIDDEN, event -> {
+            //I put this in a runLater so that the KeyEvents have a chance to process first. Otherwise, the cell commits
+            //before we realize that the CheckComboBox closed because of a ESC key.
+            Platform.runLater(() -> {
                 if (cell.isEditing()) {
                     cell.commitEdit(convertToCommaList(checkComboBox.getCheckModel().getCheckedItems()));
                 }
-            }
+            });
         });
+
+
         return checkComboBox;
     }
 
