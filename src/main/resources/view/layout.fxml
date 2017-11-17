@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+   <center>
+      <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="poNumberColumn" prefWidth="75.0" text="PO Number" />
+          <TableColumn fx:id="conditionColumn" prefWidth="75.0" text="Condition" />
+        </columns>
+      </TableView>
+   </center>
+</BorderPane>
