@@ -347,21 +347,12 @@ class CellUtils {
 
         //Commit only when box closes
         checkComboBox.addEventHandler(ComboBox.ON_HIDDEN, event -> {
-            //I put this in a runLater so that the KeyEvents have a chance to process first. Otherwise, the cell commits
-            //before we realize that the CheckComboBox closed because of an ESC key.
-            Platform.runLater(() -> {
-                if (cell.isEditing()) {
-                    //Get all the checked items from the CheckComboBox
-                    ObservableList<T> checkedItems = checkComboBox.getCheckModel().getCheckedItems();
-                    if (cell.getItem() instanceof String) {
-                        T commaSeparatedList = convertToCommaList(checkedItems, checkComboBox.getConverter());
-                        cell.commitEdit(commaSeparatedList);
-                    } else {
-                        throw new UnsupportedOperationException("Not yet supported.");
-                        //cell.commitEdit(checkedItems);
-                    }
-                }
-            });
+            if (cell.isEditing()) {
+                //Get all the checked items from the CheckComboBox
+                ObservableList<T> checkedItems = checkComboBox.getCheckModel().getCheckedItems();
+                T commaSeparatedList = convertToCommaList(checkedItems, checkComboBox.getConverter());
+                cell.commitEdit(commaSeparatedList);
+            }
         });
 
 
