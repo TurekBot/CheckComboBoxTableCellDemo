@@ -24,7 +24,6 @@
  */
 package customtablecell;
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -287,15 +286,7 @@ class CellUtils {
             cell.setGraphic(null);
         } else {
             if (cell.isEditing()) {
-                if (checkComboBox != null) {
-                    //Get items from string representation
-                    String[] separateItems = convertCommaListToSeparateItems(cell.getItem());
-                    //Check each thing contained in "item"
-                    for (String s : separateItems) {
-                        checkComboBox.getCheckModel().check((T) s);
-                    }
-
-                }
+                transferChecksToNewComboBox(checkComboBox, cell.getItem());
                 cell.setText(null);
 
                 if (graphic != null) {
@@ -307,9 +298,34 @@ class CellUtils {
             } else {
                 cell.setText(getItemText(cell, converter));
                 cell.setGraphic(graphic);
+                transferChecksToNewComboBox(checkComboBox, cell.getItem());
             }
         }
     }
+
+    /**
+     * Because TableView reuses cells (see TableView documentation for more about that), here we transfer the checks
+     * from one reused CheckComboBox to the other.
+     * @param checkComboBox the checkComboBox that you want to add selections to
+     * @param item the (hopefully comma-separated string) list that you're getting selections from
+     */
+    private static <T> void transferChecksToNewComboBox(CheckComboBox<T> checkComboBox, T item) {
+        if (checkComboBox != null) {
+            if (item != null) {
+                //Get items from string representation
+                String[] separateItems = convertCommaListToSeparateItems(item);
+                //First clear all checks that could be left behind from last item
+                checkComboBox.getCheckModel().clearChecks();
+                //Check each thing contained in "item"
+                for (String s : separateItems) {
+                    checkComboBox.getCheckModel().check((T) s);
+                }
+            } else {
+                checkComboBox.getCheckModel().clearChecks();
+            }
+        }
+    }
+
 
     private static <T> String[] convertCommaListToSeparateItems(T item) {
         //Prepare the list

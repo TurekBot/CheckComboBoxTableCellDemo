@@ -82,6 +82,16 @@ public class Controller {
         tableEntries.add(new TableEntry(8000));
         tableEntries.add(new TableEntry(9000));
         tableEntries.add(new TableEntry(10000));
+        tableEntries.add(new TableEntry(11000));
+        tableEntries.add(new TableEntry(12000));
+        tableEntries.add(new TableEntry(13000));
+        tableEntries.add(new TableEntry(14000));
+        tableEntries.add(new TableEntry(15000));
+        tableEntries.add(new TableEntry(16000));
+        tableEntries.add(new TableEntry(17000));
+        tableEntries.add(new TableEntry(18000));
+        tableEntries.add(new TableEntry(19000));
+        tableEntries.add(new TableEntry(20000));
 
         return tableEntries.toArray(new TableEntry[tableEntries.size()]);
     }
