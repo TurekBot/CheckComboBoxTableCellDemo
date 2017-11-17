@@ -348,10 +348,18 @@ class CellUtils {
         //Commit only when box closes
         checkComboBox.addEventHandler(ComboBox.ON_HIDDEN, event -> {
             //I put this in a runLater so that the KeyEvents have a chance to process first. Otherwise, the cell commits
-            //before we realize that the CheckComboBox closed because of a ESC key.
+            //before we realize that the CheckComboBox closed because of an ESC key.
             Platform.runLater(() -> {
                 if (cell.isEditing()) {
-                    cell.commitEdit(convertToCommaList(checkComboBox.getCheckModel().getCheckedItems()));
+                    //Get all the checked items from the CheckComboBox
+                    ObservableList<T> checkedItems = checkComboBox.getCheckModel().getCheckedItems();
+                    if (cell.getItem() instanceof String) {
+                        T commaSeparatedList = convertToCommaList(checkedItems, checkComboBox.getConverter());
+                        cell.commitEdit(commaSeparatedList);
+                    } else {
+                        throw new UnsupportedOperationException("Not yet supported.");
+                        //cell.commitEdit(checkedItems);
+                    }
                 }
             });
         });
@@ -363,13 +371,13 @@ class CellUtils {
     /**
      * Is this doing the job of a Converter? How could I do this same thing with a converter?
      */
-    private static <T> T convertToCommaList(ObservableList<T> checkedItems) {
+    private static <T> T convertToCommaList(ObservableList<T> checkedItems, StringConverter<T> converter) {
         //Prepare StringBuilder
         StringBuilder sb = new StringBuilder();
 
         //Put every checked item in a comma-separated list
         for (T item : checkedItems) {
-            sb.append(item.toString());
+            sb.append(converter.toString(item));
             sb.append(", ");
         }
 
