@@ -37,19 +37,6 @@ import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import org.controlsfx.control.CheckComboBox;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.collections.ObservableList;
-import javafx.event.EventType;
-import javafx.scene.Node;
-import javafx.scene.control.Cell;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
-import javafx.util.StringConverter;
-import org.controlsfx.control.CheckComboBox;
-
 // Package protected - not intended for external use
 class CellUtils {
 
@@ -304,8 +291,8 @@ class CellUtils {
             if (cell.isEditing()) {
                 if (checkComboBox != null) {
                     //Get items from string representation
-                    String[] strings = listConverter(cell.getItem());
-                    for (String s : strings) {
+                    String[] separateItems = convertCommaListToSeparateItems(cell.getItem());
+                    for (String s : separateItems) {
                         checkComboBox.getCheckModel().check((T) s);
                     }
 
@@ -325,7 +312,7 @@ class CellUtils {
         }
     }
 
-    private static <T> String[] listConverter(T item) {
+    private static <T> String[] convertCommaListToSeparateItems(T item) {
         //Prepare the list
         String[] list;
         if (item instanceof String) {

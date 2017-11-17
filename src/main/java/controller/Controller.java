@@ -56,6 +56,9 @@ public class Controller {
         conditionColumn.setOnEditCancel(handler -> System.out.println("Cancel."));
     }
 
+    /**
+     * Just preparing some rows to go in the table.
+     */
     private TableEntry[] createTableEntries() {
         ArrayList<TableEntry> tableEntries = new ArrayList<>();
 
