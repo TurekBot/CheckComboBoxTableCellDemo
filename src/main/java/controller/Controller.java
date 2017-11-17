@@ -50,13 +50,20 @@ public class Controller {
 
         conditionColumn.setCellFactory(CheckComboBoxTableCell.forTableColumn(options));
 
-        conditionColumn.setOnEditStart(handler -> System.out.println("Start."));
-        conditionColumn.setOnEditCommit(handler -> {
-            //Get new new checks
-            String newValue = handler.getNewValue();
-            System.out.println("Commit: " + newValue);
+
+
+        //If we use `.setOnEditCommit()`, we replaced the default handler and are then saying that we put ourselves in
+        // charge of writing back the property that the user just committed. This is explained clearly in the
+        // Editing section of the TableView documentation.
+        //See: https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/TableView.html
+        //However if we use addEventHandler, the default behavior is preserved.
+        conditionColumn.addEventHandler(TableColumn.editCommitEvent(), event -> {
+            String newValue = (String) event.getNewValue();
+            System.out.println("Commited value: " + newValue);
         });
-        conditionColumn.setOnEditCancel(handler -> System.out.println("Cancel."));
+        conditionColumn.addEventHandler(TableColumn.editStartEvent(), event -> System.out.println("Start."));
+        conditionColumn.addEventHandler(TableColumn.editCancelEvent(), event -> System.out.println("Cancel."));
+
     }
 
     /**
