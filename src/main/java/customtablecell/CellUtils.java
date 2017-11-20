@@ -27,7 +27,9 @@ package customtablecell;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Cell;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TreeItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -369,7 +371,14 @@ class CellUtils {
                 T commaSeparatedList = convertToCommaList(checkedItems, checkComboBox.getConverter());
                 cell.commitEdit(commaSeparatedList);
             }
+
+            //Work-around part 1: when the box is showing, make the box clickable...
+            checkComboBox.setMouseTransparent(false);
         });
+
+        //Work-around part 2: However when the box's menu is showing, make the box mouse-transparent, clicks don't matter.
+        //This solves the issue of that one NullPointerException. Details, https://gist.github.com/TurekBot/721aaee63ca3656690b7ecb7a9de198f
+        checkComboBox.addEventHandler(ComboBox.ON_SHOWN, event -> checkComboBox.setMouseTransparent(true));
 
 
         return checkComboBox;
