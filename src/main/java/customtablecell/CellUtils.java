@@ -24,6 +24,7 @@
  */
 package customtablecell;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -367,7 +368,10 @@ class CellUtils {
                 //Get all the checked items from the CheckComboBox
                 ObservableList<T> checkedItems = checkComboBox.getCheckModel().getCheckedItems();
                 T commaSeparatedList = convertToCommaList(checkedItems, checkComboBox.getConverter());
-                cell.commitEdit(commaSeparatedList);
+                Platform.runLater(() -> {
+                    cell.commitEdit(commaSeparatedList);
+                });
+
             }
         });
 
