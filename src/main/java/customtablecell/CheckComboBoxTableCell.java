@@ -32,6 +32,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -340,6 +341,18 @@ public class CheckComboBoxTableCell<S, T> extends TableCell<S, T> {
         super.startEdit();
         setText(null);
         setGraphic(checkComboBox);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void commitEdit(T item) {
+        super.commitEdit(item);
+
+        setText(getConverter().toString(item));
+        setContentDisplay(ContentDisplay.TEXT_ONLY);
+        setGraphic(null);
     }
 
     /**
